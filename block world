@@ -1,0 +1,59 @@
+# Class representing the state of the blocks world
+class BlocksWorld:
+    def __init__(self, num_blocks):
+        self.state = [[block] for block in range(num_blocks)]  # Each block starts on the table
+        self.num_blocks = num_blocks
+
+    def display_state(self):
+        # Display the current state of the blocks world
+        print("\nCurrent State of Blocks World:")
+        for i, stack in enumerate(self.state):
+            print(f" Stack {i}: {stack}")
+
+    def move(self, block, destination):
+        source_stack = self.find_block(block)
+        destination_stack = self.find_block(destination)
+
+        if source_stack is None or destination_stack is None:
+            print(f"Invalid block {block} or destination {destination}.")
+            return
+
+        # Ensure the block is at the top of its stack
+        if source_stack[-1] != block:
+            print(f"Cannot move block {block} because it's not on top.")
+            return
+
+        # Remove block from source and add to destination
+        source_stack.remove(block)
+        destination_stack.append(block)
+        self.display_state()
+
+    def find_block(self, block):
+        for stack in self.state:
+            if block in stack:
+                return stack
+        return None
+
+    def goal_state(self, goal):
+        self.state = goal
+        print("\nGoal state set.")
+        self.display_state()
+
+# Main program to run the Blocks World simulation
+def main():
+    blocks_world = BlocksWorld(3)  # Initialize with 3 blocks: 0, 1, 2
+
+    print("Initial State:")
+    blocks_world.display_state()
+
+    # Define goal state: block 0 on block 1, block 2 alone
+    goal = [[0, 1], [2]]
+    blocks_world.goal_state(goal)
+
+    print("\nPerforming Moves:")
+    blocks_world.move(1, 2)  # Move Block 1 onto Block 2
+    blocks_world.move(0, 2)  # Move Block 0 onto Block 2
+
+# Run main
+if __name__ == "__main__":
+    main()
